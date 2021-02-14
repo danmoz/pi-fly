@@ -1,0 +1,41 @@
+---
+- name: install apt requirements
+  apt:
+    name: docker-compose
+    cache_valid_time: 3600
+
+- name: install python requirements
+  pip:
+    name: docker==4.4.1
+
+- name: clone pi-hole docker git repo
+  git:
+    repo: 'https://github.com/pi-hole/docker-pi-hole.git'
+    dest: '{{ pihole_git_dir }}'
+    version: 'v5.6'
+
+- name: custom docker-compose.yml
+  template:
+    src: "docker-compose.yml.j2"
+    dest: "{{ pihole_git_dir }}/docker-compose.yml"
+
+- name: create volumes
+  community.docker.docker_volume:
+    name: "{{ item }}"
+  with_items:
+    - "etc-pihole"
+    - "etc-dnsmasq.d"
+
+- name: link systemd service
+  file:
+    src: "{{ pihole_git_dir }}/pihole.service"
+    path: "/etc/systemd/system/pihole.service"
+    state: link
+    mode: '0755'
+
+- name: start pihole service on boot
+  systemd:
+    name: "pihole"
+    daemon_reload: yes
+    enabled: yes
+    state: started

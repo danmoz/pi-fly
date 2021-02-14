@@ -1,0 +1,4 @@
+---
+pihole_dir: "/opt/pi-hole"
+pihole_git_dir: "{{pihole_dir}}/git/docker-pi-hole"
+pihole_volumes_dir: "{{pihole_dir}}/docker-volumes"
