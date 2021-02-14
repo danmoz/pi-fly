@@ -1,4 +1,13 @@
 ---
+- name: install apt requirements
+  apt:
+    name: docker-compose
+    cache_valid_time: 3600
+
+- name: install python requirements
+  pip:
+    name: docker==4.4.1
+
 - name: clone pi-hole docker git repo
   git:
     repo: 'https://github.com/pi-hole/docker-pi-hole.git'

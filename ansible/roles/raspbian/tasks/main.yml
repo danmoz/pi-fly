@@ -1,1 +1,10 @@
 ---
+- name: install apt requirements
+  apt:
+    name: docker-compose
+    cache_valid_time: 3600
+
+- name: install python requirements
+  # Required for ansible's docker module
+  pip:
+    name: docker==4.4.1
